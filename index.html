@@ -215,19 +215,13 @@ function save(){
 
 /* VÝBĚR */
 function pickImage(i){
+  const url = prompt("Vlož odkaz na obrázek z GitHubu:");
+  if(!url) return;
 
-  const input=document.createElement("input");
-  input.type="file";
-
-  input.onchange = e => {
-    const file = e.target.files[0];
-    if(!file) return;
-
-    cases[i].main = "https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/" + file.name;
-
-    save();
-    render();
-  };
+  cases[i].main = url;
+  save();
+  render();
+}
 
   input.click();
 }
