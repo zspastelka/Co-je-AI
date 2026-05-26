@@ -215,8 +215,18 @@ function save(){
 
 /* VÝBĚR */
 function pickImage(i){
-  const url = prompt("https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_1.jpg");
+  const url = prompt(
+    "Vlož URL obrázku (např. z GitHubu nebo internetu):",
+    "https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_1.jpg"
+  );
+
   if(!url) return;
+
+  // kontrola, jestli je to obrázek
+  if(!url.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
+    alert("Tohle nevypadá jako odkaz na obrázek!");
+    return;
+  }
 
   cases[i].main = url;
   save();
