@@ -12,54 +12,8 @@ body {
   padding: 20px;
 }
 
-/* LOGA */
-#logo-left {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  text-align: center;
-}
-#logo-left img { height: 60px; }
-
-#logo-right {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-}
-#logo-right img { height: 60px; }
-
-.support-text { font-size:11px; }
-
-/* NADPISY */
-h1 { text-align: center; margin-bottom: 5px; }
-h2 { text-align: center; font-size: 18px; color: #555; margin-top: 0; }
-
-
-
-
-#method {
- background: #fff;
-  border-left: 6px solid #4a90e2;
-  padding: 20px;
-  margin-bottom: 20px;
-  font-size: 16px;
-line-height: 1.5; 
-}
-
-
-
-
-/* OVLÁDÁNÍ */
-#mode-bar {
-  text-align: center;
-  margin-bottom: 20px;
-}
-#mode-bar button {
-  padding: 3px 8px;
-  font-size: 12px;
-  margin: 0 5px;
-  cursor: pointer;
-}
+h1 { text-align: center; }
+h2 { text-align: center; color:#555; }
 
 /* GRID */
 .grid {
@@ -68,116 +22,60 @@ line-height: 1.5;
 }
 
 .top-grid {
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
-.middle-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* ✅ vyplní celý řádek */
-  gap: 20px;
-  margin: 20px 0;
-}
-
-.bottom-grid {
-  grid-template-columns: repeat(3, 1fr); /* ✅ taky celý řádek */
+.middle-row, .bottom-grid {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 /* KARTA */
 .case {
   background: #fff;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 10px;
-  width: 100%; /* ✅ důležité */
-}
-
-.case h3 {
-  text-align: center;
-  margin: 6px 0;
-}
-
-.main-img {
-  border: 4px solid #ccc;
-  border-radius: 8px;
 }
 
 .main-img img {
   width: 100%;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-}
-
-/* TLAČÍTKA */
-button {
-  padding: 4px 8px;
-  margin: 4px;
-  font-size: 12px;
-  cursor: pointer;
-  width: auto;
-}
-
-.main-img button {
-  width: 100%;
 }
 
 /* FULLSCREEN */
 #viewer {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.9);
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
+  display:none;
+  position:fixed;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  justify-content:center;
+  align-items:center;
 }
 
 #viewer img {
-  max-width: 90%;
-  max-height: 90%;
+  max-width:90%;
 }
 
 #closeBtn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 30px;
-  color: white;
-  cursor: pointer;
+  position:absolute;
+  top:20px;
+  right:20px;
+  color:white;
+  font-size:30px;
+  cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGA -->
-<div id="logo-left">
-   <img src="logo-o2-chytra-skola.png">
-  <div class="support-text">Podpořeno z programu O2 Chytrá škola.</div>
-</div>
-
-<div id="logo-right">
-   <img src="logo-zs-pastelka.png">
-</div>
-
 <h1>Co je to AI</h1>
-<h2>Vyhledáváme informace o AI a tvoříme plakátky</h2>
-
-<div id="method">
-<b>Jak jsme pracovali:</b><br>
-Žáci měli za úkol vyhledat informace o AI a vytvořit plakátky.
-</div>
-
-
-<div id="mode-bar">
-  <button onclick="teacherMode()">Učitelský režim</button>
-  <button onclick="studentMode()">Žákovský režim</button>
-</div>
+<h2>Plakátky žáků</h2>
 
 <div id="board"></div>
 
-<!-- FULLSCREEN -->
 <div id="viewer">
   <div id="closeBtn" onclick="closeViewer()">✖</div>
   <img id="viewerImg">
@@ -185,53 +83,19 @@ button {
 
 <script>
 
-const PASSWORD = "ucitelka";
-let isTeacher = false;
-
-let cases = JSON.parse(localStorage.getItem("ai_cases")) ||
-  Array.from({length:10}, () => ({
-    color: "#cccccc",
-    main: ""
-  }));
-
-cases = cases.slice(0,10);
-
-/* REŽIM */
-function teacherMode(){
-  if(prompt("Zadej heslo:")!==PASSWORD) return;
-  isTeacher=true;
-  render();
-}
-
-function studentMode(){
-  isTeacher=false;
-  render();
-}
-
-/* ULOŽENÍ */
-function save(){
-  localStorage.setItem("ai_cases", JSON.stringify(cases));
-}
-
-/* VÝBĚR */
-function pickImage(i){
-  const url = prompt(
-    "Vlož URL obrázku (např. z GitHubu nebo internetu):",
-    "https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_1.jpg"
-  );
-
-  if(!url) return;
-
-  // kontrola, jestli je to obrázek
-  if(!url.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
-    alert("Tohle nevypadá jako odkaz na obrázek!");
-    return;
-  }
-
-  cases[i].main = url;
-  save();
-  render();
-}
+/* ✅ OBRÁZKY NATVRDO */
+let cases = [
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_1.jpg"},
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_2.jpg"},
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_3.jpg"},
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_4.jpg"},
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_5.jpg"},
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_6.jpg"},
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_7.jpg"},
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_8.jpg"},
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_9.jpg"},
+ {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_10.jpg"}
+];
 
 /* FULLSCREEN */
 function openViewer(src){
@@ -253,7 +117,7 @@ function render(){
   top.className="grid top-grid";
 
   const middle=document.createElement("div");
-  middle.className="middle-row";
+  middle.className="grid middle-row";
 
   const bottom=document.createElement("div");
   bottom.className="grid bottom-grid";
@@ -265,55 +129,16 @@ function render(){
 
     box.innerHTML=`<h3>Plakát ${i+1}</h3>`;
 
-    const main=document.createElement("div");
-    main.className="main-img";
-    main.style.borderColor=c.color;
-
     if(c.main){
       const img=document.createElement("img");
       img.src=c.main;
-      img.onclick=()=>openViewer(c.main); // ✅ zvětšení
-      main.appendChild(img);
+      img.onclick=()=>openViewer(c.main);
+      box.appendChild(img);
     }
 
-    if(isTeacher){
-
-      const btn=document.createElement("button");
-      btn.textContent="Vybrat obrázek";
-      btn.onclick=()=>pickImage(i);
-      main.appendChild(btn);
-
-      const del=document.createElement("button");
-      del.textContent="✖ Odstranit obrázek";
-      del.style.background="#e74c3c";
-      del.style.color="white";
-      del.onclick=()=>{
-        c.main="";
-        save();
-        render();
-      };
-      main.appendChild(del);
-
-      const color=document.createElement("input");
-      color.type="color";
-      color.value=c.color;
-      color.oninput=e=>{
-        c.color=e.target.value;
-        save();
-        render();
-      };
-      main.appendChild(color);
-    }
-
-    box.appendChild(main);
-
-    if(i < 4){
-      top.appendChild(box);
-    } else if(i <= 6){
-      middle.appendChild(box);
-    } else {
-      bottom.appendChild(box);
-    }
+    if(i<4) top.appendChild(box);
+    else if(i<=6) middle.appendChild(box);
+    else bottom.appendChild(box);
 
   });
 
