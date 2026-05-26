@@ -2,41 +2,31 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<title>Co je to AI</title>
+<title>Plakátky AI</title>
 
 <style>
 body {
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   background: #f4f6f8;
-  margin: 0;
   padding: 20px;
 }
 
-h1 { text-align: center; }
-h2 { text-align: center; color:#555; }
-
-/* GRID */
+/* ✅ RESPONZIVNÍ GRID */
 .grid {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
-}
-
-.top-grid {
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-}
-
-.middle-row, .bottom-grid {
-  grid-template-columns: repeat(3, 1fr);
 }
 
 /* KARTA */
 .case {
-  background: #fff;
-  border-radius: 10px;
+  background: white;
   padding: 10px;
+  border-radius: 10px;
+  text-align: center;
 }
 
-.main-img img {
+.case img {
   width: 100%;
   border-radius: 8px;
   cursor: pointer;
@@ -58,10 +48,10 @@ h2 { text-align: center; color:#555; }
   max-width:90%;
 }
 
-#closeBtn {
+#close {
   position:absolute;
   top:20px;
-  right:20px;
+  right:30px;
   color:white;
   font-size:30px;
   cursor:pointer;
@@ -71,83 +61,56 @@ h2 { text-align: center; color:#555; }
 
 <body>
 
-<h1>Co je to AI</h1>
-<h2>Plakátky žáků</h2>
+<h1>Plakátky o AI</h1>
 
-<div id="board"></div>
+<div id="board" class="grid"></div>
 
 <div id="viewer">
-  <div id="closeBtn" onclick="closeViewer()">✖</div>
-  <img id="viewerImg">
+  <div id="close" onclick="closeViewer()">✖</div>
+  <img id="bigImg">
 </div>
 
 <script>
 
-/* ✅ OBRÁZKY NATVRDO */
-let cases = [
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_1.jpg"},
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_2.jpg"},
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_3.jpg"},
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_4.jpg"},
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_5.jpg"},
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_6.jpg"},
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_7.jpg"},
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_8.jpg"},
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_9.jpg"},
- {main:"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_10.jpg"}
+const images = [
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_1.jpg",
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_2.jpg",
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_3.jpg",
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_4.jpg",
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_5.jpg",
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_6.jpg",
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_7.jpg",
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_8.jpg",
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_9.jpg",
+"https://raw.githubusercontent.com/zspastelka/Co-je-AI/main/img/AI%204.A_10.jpg"
 ];
 
-/* FULLSCREEN */
+const board = document.getElementById("board");
+
+images.forEach((src, i) => {
+  const box = document.createElement("div");
+  box.className = "case";
+
+  const title = document.createElement("h3");
+  title.textContent = "Plakát " + (i+1);
+
+  const img = document.createElement("img");
+  img.src = src;
+  img.onclick = () => openViewer(src);
+
+  box.appendChild(title);
+  box.appendChild(img);
+  board.appendChild(box);
+});
+
 function openViewer(src){
-  document.getElementById("viewerImg").src = src;
+  document.getElementById("bigImg").src = src;
   document.getElementById("viewer").style.display = "flex";
 }
 
 function closeViewer(){
   document.getElementById("viewer").style.display = "none";
 }
-
-/* RENDER */
-function render(){
-
-  const board=document.getElementById("board");
-  board.innerHTML="";
-
-  const top=document.createElement("div");
-  top.className="grid top-grid";
-
-  const middle=document.createElement("div");
-  middle.className="grid middle-row";
-
-  const bottom=document.createElement("div");
-  bottom.className="grid bottom-grid";
-
-  cases.forEach((c,i)=>{
-
-    const box=document.createElement("div");
-    box.className="case";
-
-    box.innerHTML=`<h3>Plakát ${i+1}</h3>`;
-
-    if(c.main){
-      const img=document.createElement("img");
-      img.src=c.main;
-      img.onclick=()=>openViewer(c.main);
-      box.appendChild(img);
-    }
-
-    if(i<4) top.appendChild(box);
-    else if(i<=6) middle.appendChild(box);
-    else bottom.appendChild(box);
-
-  });
-
-  board.appendChild(top);
-  board.appendChild(middle);
-  board.appendChild(bottom);
-}
-
-render();
 
 </script>
 
