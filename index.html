@@ -28,8 +28,9 @@ body {
 
 .case img {
   width: 100%;
-  border-radius: 8px;
-  cursor: pointer;
+  height: 200px;          /* ✅ pevná výška náhledu */
+  object-fit: contain;    /* ✅ zobrazí celý plakát (nezvětší ho) */
+  background: #eee;       /* ✅ hezké pozadí */
 }
 
 /* FULLSCREEN */
